@@ -97,8 +97,8 @@ ENTITY_DAMAGE = {
     'Enemy1Shot': 20,
     'Enemy2': 2,
     'Enemy2Shot': 15,
-    'Enemy3': 5,
-    'Enemy3Shot': 30,
+    'Enemy3': 3,
+    'Enemy3Shot': 20,
 }
 
 ENTITY_SCORE = {
@@ -166,9 +166,9 @@ PLAYER_KEY_SHOOT = {'Player1': pygame.K_RCTRL,
 
 # S
 SPAWN_TIME = {
-    'Level1': 2000,
-    'Level2': 1000,
-    'Level3': 900
+    'Level1': 4000,
+    'Level2': 3000,
+    'Level3': 2000
 }
 
 # T
