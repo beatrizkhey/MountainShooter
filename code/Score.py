@@ -2,11 +2,12 @@ import sys
 from datetime import datetime
 
 import pygame
-from pygame import Surface, Rect, KEYDOWN, K_RETURN, K_BACKSPACE, K_ESCAPE
+from pygame import Surface, Rect, KEYDOWN, K_RETURN, K_BACKSPACE, K_ESCAPE, K_r, K_m
 from pygame.font import Font
 
-from code.Const import C_YELLOW, SCORE_POS, MENU_OPTION, C_WHITE
+from code.Const import C_YELLOW, SCORE_POS, MENU_OPTION, C_WHITE, WIN_WIDTH, WIN_HEIGHT
 from code.DBProxy import DBProxy
+from code.Menu import Menu
 
 
 class Score:
@@ -61,7 +62,7 @@ class Score:
         pygame.mixer_music.load('./asset/Score.mp3')
         pygame.mixer_music.play(-1)
         self.window.blit(source=self.surf, dest=self.rect)
-        self.score_text(48, 'TOP 10 SCORE', C_YELLOW, SCORE_POS['Title'])
+        self.score_text(30, 'TOP 10 SCORE', C_YELLOW, SCORE_POS['Title'])
         self.score_text(20, 'NAME     SCORE           DATE      ', C_YELLOW, SCORE_POS['Label'])
         db_proxy = DBProxy('DBScore')
         list_score = db_proxy.retrieve_top10()
@@ -71,14 +72,20 @@ class Score:
             id_, name, score, date = player_score
             self.score_text(20, f'{name}     {score:05d}     {date}', C_YELLOW,
                             SCORE_POS[list_score.index(player_score)])
+
+        self.display_restart_menu()
+
+    def display_restart_menu(self):
         while True:
+            # self.window.blit(source=self.surf, dest=self.rect)
+            self.score_text(25, 'Press ENTER to Restart', C_WHITE, ((WIN_WIDTH / 2), (WIN_HEIGHT - 10)))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                 if event.type == KEYDOWN:
-                    if event.key == K_ESCAPE:
-                        return
+                    if event.key == pygame.K_RETURN:  # ENTER
+                        return MENU_OPTION[0]
             pygame.display.flip()
 
     def score_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple):
