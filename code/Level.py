@@ -35,9 +35,9 @@ class Level:
             player = EntityFactory.get_entity('Player2')
             player.score = player_score[1]
             self.entity_list.append(player)
-        pygame.time.set_timer(EVENT_ENEMY, SPAWN_TIME)
-        pygame.time.set_timer(EVENT_TIMEOUT, TIMEOUT_STEP)  # 100ms
-
+        spawn_time = SPAWN_TIME.get(self.name, 1000)
+        pygame.time.set_timer(EVENT_ENEMY, spawn_time)
+        pygame.time.set_timer(EVENT_TIMEOUT, TIMEOUT_STEP)
     def run(self, player_score: list[int]):
         level_index = int(self.name[-1]) - 1
         pygame.mixer_music.load(f'./asset/{MUSIC_LEVELS[level_index]}')
@@ -85,14 +85,18 @@ class Level:
                 if not found_player:
                     return False
 
+            # Collisions
+            EntityMediator.verify_collision(entity_list=self.entity_list)
+            EntityMediator.verify_health(entity_list=self.entity_list)
+
+
             # printed text
             self.level_text(20, f'{self.name} - Timeout: {self.timeout / 1000:.1f}s', C_WHITE, (10, 5))
             self.level_text(20, f'fps: {clock.get_fps():.0f}', C_WHITE, (10, WIN_HEIGHT - 35))
             self.level_text(20, f'entidades: {len(self.entity_list)}', C_WHITE, (10, WIN_HEIGHT - 20))
             pygame.display.flip()
-            # Collisions
-            EntityMediator.verify_collision(entity_list=self.entity_list)
-            EntityMediator.verify_health(entity_list=self.entity_list)
+
+
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):
         text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
